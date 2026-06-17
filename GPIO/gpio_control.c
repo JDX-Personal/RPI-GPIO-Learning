@@ -10,14 +10,26 @@
 #endif
 
 int main(int argc, char*argv[]){
+	unsigned int status = 0;
 	if(argc != 2){
-		perror("Incorrect number of arguments!\n");
+		perror("Must have only one argument.  Options are: On Off\n");
 		return 1;
+	}
+	else{
+		if(strcmp(argv[1], "On") == 0){
+			status = 1;
+		}
+		else if(strcmp(argv[1], "Off") == 0){
+			status = 0;
+		}
+		else{
+			perror("Invalid argument.  Must be either On or Off.\n");
+			return 1;
+		}
 	}
 	
 	char *chipname = "gpiochip0";
 	unsigned int line_num = 4;	// GPIO Pin #4
-	char *pstatus = argv[1];
 	struct gpiod_chip *chip;
 	struct gpiod_line *line;
 	int ret;
@@ -34,19 +46,14 @@ int main(int argc, char*argv[]){
 		return 1;
 	}
 	
-	ret = gpiod_line_request_output(line, CONSUMER, 0);
+	ret = gpiod_line_request_output(line, CONSUMER, status);
 	if (ret < 0) {
 		perror("Request line as output failed\n");
 		return 1;
 	}
 	
 	//Do Something
-	if(strcmp(pstatus, "On") == 0){
-		ret = gpiod_line_set_value(line, 1);
-	}
-	else{
-		ret = gpiod_line_set_value(line, 0);
-	}
+	ret = gpiod_line_set_value(line, status);
 	
 	
 	release_line:
