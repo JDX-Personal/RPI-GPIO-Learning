@@ -1,3 +1,10 @@
+/**
+ * @file gpio_control.c
+ * @brief Used to turn GPIO4 on and off
+ * @author Jared Hagemann
+ * @date 7/17/2026
+ * */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
