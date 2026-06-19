@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
 		return 1;
 	}
 	
-	int line_num = 4;	// GPIO Pin #4
+	int line_num = 5;	// GPIO Pin #4
 	gpiod_chip* chip = gpiod_chip_open_by_name("gpiochip0"); 
 	if (!chip) {
 		std::cout << "Open chip failed\n";
