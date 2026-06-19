@@ -1,6 +1,6 @@
 /**
  * @file gpio_control.cpp
- * @brief Used to turn GPIO4 on and off
+ * @brief Used to turn a GPIO on and off.  First argument is GPIO number.  Second argument is On or Off.
  * @author Jared Hagemann
  * @date 7/19/2026
  * */
@@ -13,24 +13,26 @@
 #define	CONSUMER	"Consumer"
 
 int main(int argc, char* argv[]){	
-	if(argc != 2){
-		std::cout << "Must have only one argument.  Options are: On Off\n";
+	if(argc != 3){
+		std::cout << "Must have exactly 2 arguments. First argument is GPIO number.  Second argument is On/Off\n";
 		return 1;
 	}
 	
+	//Need to check first argument still
+	
 	int status = 0;
-	if(strcmp(argv[1], "On") == 0){
+	if(strcmp(argv[2], "On") == 0){
 		status = 1;
 	}
-	else if(strcmp(argv[1] , "Off") == 0){
+	else if(strcmp(argv[2] , "Off") == 0){
 		status = 0;
 	}
 	else{
-		std::cout << "Invalid argument.  Must be either On or Off\n";
+		std::cout << "Invalid second argument.  Must be either On or Off\n";
 		return 1;
 	}
 	
-	int line_num = 5;	// GPIO Pin #4
+	int line_num = std::stoi(argv[1]);	// GPIO Pin #4
 	gpiod_chip* chip = gpiod_chip_open_by_name("gpiochip0"); 
 	if (!chip) {
 		std::cout << "Open chip failed\n";
