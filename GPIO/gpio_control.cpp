@@ -1,3 +1,10 @@
+/**
+ * @file gpio_control.cpp
+ * @brief Used to turn GPIO4 on and off
+ * @author Jared Hagemann
+ * @date 7/19/2026
+ * */
+
 #include<gpiod.h>
 #include<iostream>
 #include<string>
