@@ -99,3 +99,64 @@ void GPIO::displayState(){
               << ", Bias: " << gpiod_line_bias(line) << std::endl;
 }
 
+int GPIO::waitForEdge(int eventType, int timeout_ms){
+    if(eventType < 1 || eventType > 3){
+        throw std::runtime_error("Event must be 1 (Rising), 2 (Falling), 3 (Both)");
+    }
+    
+    closeLine();
+    
+    chip = gpiod_chip_open_by_name("gpiochip0");
+    if(!chip){
+        throw std::runtime_error("Failed to open gpiochip0");
+    }
+    
+    line = gpiod_chip_get_line(chip, gpioNumber);
+    if(!line){
+        closeLine();
+        throw std::runtime_error("Failed to open gpio line");
+    }
+    
+    int ret = -1;
+    if(eventType == 1){
+        std::cout << "Event Type 1\n";
+        ret = gpiod_line_request_rising_edge_events(line, CONSUMER);
+    }
+    else if(eventType == 2){
+        std::cout << "Event Type 2\n";
+        ret = gpiod_line_request_falling_edge_events(line, CONSUMER);
+    }
+    else if(eventType == 3){
+        std::cout << "Event Type 3\n";
+        ret = gpiod_line_request_both_edges_events(line, CONSUMER);
+    }
+    
+    if(ret < 0){
+        throw std::runtime_error("Failed to request edge events");
+    }
+    
+    struct timespec ts = {0,0};
+    struct timespec* timeout_ptr = nullptr;
+    
+    if(timeout_ms >=0){
+        ts.tv_sec = timeout_ms / 1000;
+        ts.tv_nsec = (timeout_ms % 1000) * 1000000L;
+        timeout_ptr = &ts;
+    }
+    
+    ret = gpiod_line_event_wait(line, timeout_ptr);
+    
+    if(ret < 0){
+        throw std::runtime_error("Error during edge wait");
+    }
+    if(ret == 0){
+        return 0; //Timeout
+    }
+    
+    struct gpiod_line_event event;
+    gpiod_line_event_read(line, &event);
+    
+    return 1; //Event Detected
+    
+}
+

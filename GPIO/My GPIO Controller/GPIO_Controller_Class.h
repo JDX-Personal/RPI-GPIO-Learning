@@ -22,6 +22,7 @@ class GPIO{
 		int getValue();
 		void flash(int cycles, int delay_us = 500000);
 		void displayState();	
+		int waitForEdge(int eventType, int timeout_ms);
 		
 		GPIO(const GPIO&) = delete;
 		GPIO& operator=(const GPIO&) = delete;
