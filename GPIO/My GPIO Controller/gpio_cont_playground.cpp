@@ -7,7 +7,7 @@
 
 #include<iostream>
 #include<unistd.h>
-#include "gpio_controller.h"
+#include "GPIO_Controller_Class.h"
 
 int main(){
 	GPIO gpio4(4), gpio27(27);

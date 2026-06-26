@@ -1,3 +1,3 @@
 #!/bin/bash
-g++ gpio_cont_playground.cpp gpio_controller.cpp -o gpio_cont_playground -lgpiod
+g++ gpio_cont_playground.cpp GPIO_Controller_Class.cpp -o gpio_cont_playground -lgpiod
 
