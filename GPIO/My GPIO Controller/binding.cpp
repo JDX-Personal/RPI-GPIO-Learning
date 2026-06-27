@@ -18,10 +18,11 @@ BOOST_PYTHON_MODULE(GPIO_Controller_Class){
 		.def("getValue", &GPIO::getValue)		
 		.def("displayState", &GPIO::displayState)
 		.def("flash", 
-				static_cast<void (GPIO::*)(int, int)>(&GPIO::flash),
+				&GPIO::flash,
 				(py::arg("cycles"), py::arg("delay_us") = 500000))
 		.def("waitForEdge", 
 				&GPIO::waitForEdge,
 				(py::arg("eventType"), py::arg("timeout_ms") = -1))
+		.def("waitForEdgeAsync", &GPIO::waitForEdgeAsync)
 	;
 }

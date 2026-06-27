@@ -11,6 +11,9 @@
 #include <string>
 #include <unistd.h>
 #include <gpiod.h>
+#include <thread>
+#include <functional>
+#include <boost/python.hpp>
 
 #define CONSUMER "GPIO_Controller_Class"
 
@@ -158,5 +161,19 @@ int GPIO::waitForEdge(int eventType, int timeout_ms){
     
     return 1; //Event Detected
     
+}
+
+
+//Not using this method because Asynce does not play well with Python (Need to look into)
+void GPIO::waitForEdgeAsync(int eventType, int timeout_ms, boost::python::object callback){
+    std::thread([this, eventType, timeout_ms, callback](){
+        try{
+            int result = waitForEdge(eventType, timeout_ms);
+            callback(result == 1);
+        }
+        catch(...){
+            callback(false);
+        }
+    }).detach();
 }
 

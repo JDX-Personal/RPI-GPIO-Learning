@@ -1,5 +1,7 @@
 #pragma once
 #include <cstdint>
+#include <functional>
+#include <boost/python.hpp>
 
 struct gpiod_chip;
 struct gpiod_line;
@@ -23,6 +25,7 @@ class GPIO{
 		void flash(int cycles, int delay_us = 500000);
 		void displayState();	
 		int waitForEdge(int eventType, int timeout_ms);
+		void waitForEdgeAsync(int eventType, int timeout_ms, boost::python::object callback);
 		
 		GPIO(const GPIO&) = delete;
 		GPIO& operator=(const GPIO&) = delete;
